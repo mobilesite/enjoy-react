@@ -1,0 +1,48 @@
+{
+  "name": "enjoy-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dll-build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./build/webpack.dll.config.js --progress",
+    "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./build/webpack.prod.config.js --progress"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "add-asset-html-webpack-plugin": "^2.1.2",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "compression-webpack-plugin": "^1.0.1",
+    "copy-webpack-plugin": "^4.2.3",
+    "css-loader": "^0.28.7",
+    "eslint-friendly-formatter": "^3.0.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "friendly-errors-webpack-plugin": "^1.6.1",
+    "glob": "^7.1.2",
+    "html-webpack-plugin": "^2.30.1",
+    "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "postcss-loader": "^2.0.9",
+    "progress-bar-webpack-plugin": "^1.10.0",
+    "react-router-dom": "^4.2.2",
+    "style-loader": "^0.19.0",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.9.1",
+    "webpack-bundle-analyzer": "^2.9.1",
+    "webpack-merge": "^4.1.1",
+    "webpack-uglify-parallel": "^0.1.4"
+  },
+  "dependencies": {
+    "babel-plugin-istanbul": "^4.1.5",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "history": "^4.7.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "redux": "^3.7.2"
+  }
+}
