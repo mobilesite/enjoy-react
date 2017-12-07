@@ -23,7 +23,7 @@ module.exports = {
             require('autoprefixer')
         ]
     },
-    libEntry: ['react', 'react-dom', 'history', 'react-router', 'redux', 'react-redux'],
+    libEntry: ['react', 'react-dom', 'history', 'react-router', 'react-router-dom', 'react-router-redux', 'redux', 'react-redux', 'redux-saga'],
     dll: {
         
         fileName: 'lib.js',

@@ -55,10 +55,10 @@ function cssLoaders(options) {
                 use: loaders,
                 // vue-style-loader是style-loader的fork，和style-loader类似, 也能动态地将CSS以style标签的形式插入到HTML文档中. https://www.npmjs.com/package/vue-style-loader
                 // 存疑：?? 不用vue的时候是否可以用这个loader
-                fallback: 'vue-style-loader'
+                // fallback: 'vue-style-loader'
             });
         } else {
-            return ['vue-style-loader'].concat(loaders);
+            return loaders;
         }
     }
 

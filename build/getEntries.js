@@ -1,5 +1,7 @@
 const glob = require('glob');
+const path = require('path');
 const utils = require('./utils');
+const joinPath = utils.joinPath;
 
 let entryObj = {};
 let globArr = [];
@@ -7,24 +9,24 @@ let fileArr = [];
 
 const typeArr = [
     {
-        directory: 'src/pages',
+        directory: './src/pages',
         name: 'page',
         filename: 'main'
     },
     // {
     //     directory: 'src/utils',
     //     name: 'util',
-    //     filename: 'util'
+    //     filename: 'main'
     // },
     // {
     //     directory: 'src/filters',
     //     name: 'filter',
-    //     filename: 'filter'
+    //     filename: 'main'
     // },
     // {
     //     directory: 'src/directives',
     //     name: 'directive',
-    //     filename: 'directive'
+    //     filename: 'main'
     // }
 ];
 
@@ -35,10 +37,17 @@ typeArr.forEach((type, index) => {
     });
 
     globArr[type.name].found.forEach(filepath => {
-        const modulenName = filepath.replace(new RegExp(`/${type.filename}.js`), '');
+        const moduleName = filepath.replace(new RegExp(`/${type.filename}.js`), '');
+        console.log(entryObj,type.name, 222222222)
 
-        entryObj[type.name][modulenName] = joinPath(type.directory, filepath);
+        if(!entryObj[type.name]) {
+            entryObj[type.name] = [];
+        }
+
+        entryObj[type.name][moduleName] = path.resolve(__dirname, '..', joinPath(type.directory, filepath));
     })
 })
+
+console.log(111111, entryObj)
 
 module.exports = entryObj;

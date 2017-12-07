@@ -10,8 +10,6 @@ const outputPath = isDebug
     ? `${config.dll.dev.basePath}`
     : `${config.dll.prod.basePath}`;
 
-    console.log(path.join(outputPath, 'manifest.json'))
-
 const plugins = [
     new webpack.DllPlugin({
         path: path.join(outputPath, 'manifest.json'), //定义 manifest 文件生成的位置
@@ -51,7 +49,7 @@ let ret = {
         umdNamedDefine: true
     },
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx'], //这里如果写错，会导致所有node_modules下的文件都找不到的报错
         alias: config.alias
     },
     plugins: plugins
@@ -60,7 +58,5 @@ let ret = {
 if(isDebug) {
     ret.devtool = 'eval-source-map';
 }
-
-console.log(ret)
 
 module.exports = ret;
