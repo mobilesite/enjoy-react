@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dll-dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./build/webpack.dll.conf.js --progress && sudo npm run dev",
+    "dev": "node build/dev-server.js",
     "dll-build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./build/webpack.dll.config.js --progress",
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./build/webpack.prod.config.js --progress"
   },
@@ -22,6 +24,7 @@
     "friendly-errors-webpack-plugin": "^1.6.1",
     "glob": "^7.1.2",
     "html-webpack-plugin": "^2.30.1",
+    "http-proxy-middleware": "^0.17.4",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "postcss-loader": "^2.0.9",
     "progress-bar-webpack-plugin": "^1.10.0",

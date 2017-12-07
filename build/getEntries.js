@@ -41,4 +41,6 @@ typeArr.forEach((type, index) => {
     })
 })
 
+console.log(22222222, entryObj)
+
 module.exports = entryObj;
