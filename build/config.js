@@ -1,6 +1,7 @@
 const path = require('path');
 const utils = require('./utils');
 const joinPath = utils.joinPath;
+const entryObj = require('./getEntries');
 
 module.exports = {
     assetsRoot: '../static',
@@ -38,7 +39,17 @@ module.exports = {
         }
     },
     dev: {
-        NODE_ENV: '"development"'
+        NODE_ENV: '"development"',
+        port: 80,
+        proxyTable: {
+            '/dll/libs.js': {
+                target: 'http://127.0.0.1:9090',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/dll/': 'dll/dev/'
+                }
+            }
+        }
     },
     test: {
         NODE_ENV: '"test"'
@@ -54,5 +65,6 @@ module.exports = {
             drop_debugger: true
         },
         productionSourceMap: false, // 是否生成source map
-    }
+    },
+    entryObj
 }

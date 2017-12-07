@@ -48,6 +48,4 @@ typeArr.forEach((type, index) => {
     })
 })
 
-console.log(111111, entryObj)
-
 module.exports = entryObj;

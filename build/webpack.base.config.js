@@ -8,7 +8,6 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 
-const entryObj = require('./getEntries');
 const config = require('./config');
 const utils = require('./utils');
 const joinPath = utils.joinPath;
@@ -17,7 +16,7 @@ const isDebug = process.env.NODE_ENV === 'development';
 let ret = {
     entry: {
         ...config.libEntry,
-        ...entryObj.page
+        ...config.entryObj.page
     },
     output: {
         path: path.resolve(__dirname, config.assetsRoot),
