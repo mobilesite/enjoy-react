@@ -9,7 +9,7 @@ module.exports = {
     alias: {
         actions: joinPath('src/actions'),
         assets: joinPath('src/assets'),
-        blocks: joinPath('src/blocks'),
+        containers: joinPath('src/containers'),
         components: joinPath('src/components'),
         constants: joinPath('src/constants'),
         pages: joinPath('src/pages'),
@@ -30,17 +30,19 @@ module.exports = {
         fileName: 'lib.js',
         manifestFileName: 'manifest.json',
         outputPath: '/js/dll/', // 生成目录，是相对于assetsRoot的目录
-        publicPath: '//static.test.com/js/dll/',
+        publicPath: '/js/dll/',
         dev: {
-            basePath: path.resolve(__dirname, '../dll/dev'), //执行NODE_ENV=development webpack --config  build/webpack.dll.conf.js --progress时的输出目录
+            basePath: path.resolve(__dirname, '../dll/dev') // 执行NODE_ENV=development webpack --config  build/webpack.dll.conf.js --progress时的输出目录
         },
         prod: {
-            basePath: path.resolve(__dirname, '../dll/prod'), //执行NODE_ENV=production webpack --config  build/webpack.dll.conf.js --progress时的输出目录
+            basePath: path.resolve(__dirname, '../dll/prod') // 执行NODE_ENV=production webpack --config build/webpack.dll.conf.js --progress时的输出目录
         }
     },
     dev: {
-        NODE_ENV: '"development"',
-        port: 80,
+        env: {
+            NODE_ENV: JSON.stringify('development'),
+            PORT: 80
+        },
         proxyTable: {
             '/dll/libs.js': {
                 target: 'http://127.0.0.1:9090',
@@ -52,10 +54,14 @@ module.exports = {
         }
     },
     test: {
-        NODE_ENV: '"test"'
+        env: {
+            NODE_ENV: JSON.stringify('test')
+        }
     },
     prod: {
-        NODE_ENV: '"production"',
+        env: {
+            NODE_ENV: JSON.stringify('production')
+        },
         productionGzip: false, // 是否开启Gzip
         productionGzipExtensions: ['js', 'css'], // Gzip后缀名
         bundleAnalyzerReport: process.env.npm_config_report, // ??process.env.npm_config_report获取的是--report参数吗
@@ -64,7 +70,7 @@ module.exports = {
             drop_console: true,
             drop_debugger: true
         },
-        productionSourceMap: false, // 是否生成source map
+        productionSourceMap: false // 是否生成source map
     },
     entryObj
 }

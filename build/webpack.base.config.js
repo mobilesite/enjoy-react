@@ -47,12 +47,12 @@ let ret = {
                 test: /\.js|jsx$/,
                 loader: 'babel-loader',
                 // loader: 'happypack/loader?id=happybabel',
-                // include: [
-                //     joinPath('src'), 
-                //     joinPath('dll'), 
-                //     joinPath('test'),
-                //     joinPath('node_modules')
-                // ]
+                include: [
+                    joinPath('src'), 
+                    joinPath('dll'), 
+                    joinPath('test'),
+                    joinPath('node_modules')
+                ]
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -110,26 +110,27 @@ let ret = {
         ]),
 
         // split vendor js into its own file
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: function(module, count) {
-                // any required modules inside node_modules are extracted to vendor
-                return (
-                    module.resource &&
-                    /\.js$/.test(module.resource) &&
-                    module.resource.indexOf(
-                        path.join(__dirname, '../node_modules')
-                    ) === 0
-                );
-            }
-        }),
+        // 这个plugin的顺序必须在上一个之后，否则会报错：CommonsChunkPlugin: While running in normal mode it's not allowed to use a non-entry chunk
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'vendor',
+        //     minChunks: function(module, count) {
+        //         // any required modules inside node_modules are extracted to vendor
+        //         return (
+        //             module.resource &&
+        //             /\.js$/.test(module.resource) &&
+        //             module.resource.indexOf(
+        //                 path.join(__dirname, '../node_modules')
+        //             ) === 0
+        //         );
+        //     }
+        // }),
 
-        // extract webpack runtime and module manifest to its own file in order to
-        // prevent vendor hash from being updated whenever app bundle is updated
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest',
-            chunks: ['vendor']
-        }),
+        // // extract webpack runtime and module manifest to its own file in order to
+        // // prevent vendor hash from being updated whenever app bundle is updated
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'manifest',
+        //     chunks: ['vendor']
+        // }),
 
         new webpack.optimize.OccurrenceOrderPlugin(),
 

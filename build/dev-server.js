@@ -1,7 +1,7 @@
 var config = require('./config');
 
 if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = JSON.parse(config.dev.NODE_ENV);
+  process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV);
 };
 
 var path = require('path');
@@ -11,7 +11,7 @@ var webpack = require('webpack');
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
-var privateKey  = fs.readFileSync(path.join(__dirname, './certificate/private.pem'), 'utf8');
+var privateKey = fs.readFileSync(path.join(__dirname, './certificate/private.pem'), 'utf8');
 var certificate = fs.readFileSync(path.join(__dirname, './certificate/file.crt'), 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 
@@ -26,7 +26,7 @@ var webpackConfig = process.env.NODE_ENV === 'test'
   ? require('./webpack.prod.config')
   : require('./webpack.dev.config');
 
-var port = process.env.PORT || config.dev.port;
+var port = process.env.PORT || config.dev.env.PORT;
 
 // Define proxies
 // https://github.com/chimurai/http-proxy-middleware
@@ -121,10 +121,10 @@ app.use(devMiddleware);
 app.use(hotMiddleware);
 
 // serve pure static assets
-var staticPath = path.posix.join(config.dev.assetsPublicPath);
+var staticPath = path.posix.join(config.assetsPublicPath);
 //console.log('>>>>>>>>>>\n staticPath:', staticPath);
 
-// 对于访问config.dev.assetsPublicPath/config.dev.assetsSubDirectory(如/static)下的内容，都执行express.static('./static')。大意：请求文件包含/static的时候，才从./static下面提供静态文件服务
+// 对于访问config.dev.assetsPublicPath/config.assetsSubDirectory(如/static)下的内容，都执行express.static('./static')。大意：请求文件包含/static的时候，才从./static下面提供静态文件服务
 // express.static(root, [options])
 // The root argument refers to the root directory from which the static assets are to be served
 // Mount the middleware at “/static” to serve static content only when their request path is prefixed with “/static”:

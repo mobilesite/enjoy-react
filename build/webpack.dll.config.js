@@ -12,8 +12,8 @@ const outputPath = isDebug
 
 const plugins = [
     new webpack.DllPlugin({
-        path: path.join(outputPath, 'manifest.json'), //定义 manifest 文件生成的位置
-        name: '[name]', //dll bundle 输出到哪个全局变量上，和 output.library 一样即可。[name]的部分由entry的名字替换
+        path: path.join(outputPath, 'manifest.json'), // 定义 manifest 文件生成的位置
+        name: '[name]', // dll bundle 输出到哪个全局变量上，和 output.library 一样即可。[name]的部分由entry的名字替换
         context: __dirname
     }),
     new webpack.optimize.OccurrenceOrderPlugin()
@@ -22,7 +22,7 @@ const plugins = [
 if (!isDebug) {
     plugins.push(
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': config.prod.env
+            'process.env': config.prod.env
         })
     );
     plugins.push(
@@ -30,7 +30,7 @@ if (!isDebug) {
             mangle: {
                 except: ['$', 'Zepto', 'exports', 'require']
             },
-            // exclude: /\.min\.js$/,
+            exclude: /\.min\.js$/,
             compress: { warnings: false },
             output: { comments: false }
         })
@@ -44,12 +44,12 @@ let ret = {
     output: {
         path: outputPath,
         filename: '[name].js',
-        library: '[name]', //output.library将会定义为 window.${output.library}
+        library: '[name]', // output.library将会定义为 window.${output.library}
         libraryTarget: 'umd',
         umdNamedDefine: true
     },
     resolve: {
-        extensions: ['.js', '.jsx'], //这里如果写错，会导致所有node_modules下的文件都找不到的报错
+        extensions: ['.js', '.jsx'], // 这里如果写错，会导致所有node_modules下的文件都找不到的报错
         alias: config.alias
     },
     plugins: plugins

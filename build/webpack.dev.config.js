@@ -48,7 +48,6 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
   baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name]);
 });
 
-console.log(1111111111111, config.entryObj)
 Object.keys(config.entryObj.page).map((item) => {
   /**
    * 将抽取好的js和css公用文件插入到html页面中
@@ -56,9 +55,9 @@ Object.keys(config.entryObj.page).map((item) => {
   // https://github.com/ampedandwired/html-webpack-plugin
   console.log('>>>>>>>>>>\n 每一个页面的名称:', item);
   var htmlPlugin = new HtmlWebpackPlugin({
-    filename: `${item}.html`,//若要修改在地址栏中访问的地址，则需要修改这里。比如如果想用localhost/html/xxx.html访问，则这里要写成html/${item}.html
-    template: path.resolve(config.alias.pages, `./${item}/page.html`),
-    chunks: ['vendor', 'manifest', item], //指定包含哪些chunk(含JS和CSS)，不指定的话，它会包含打包后输出的所有chunk
+    filename: `${item}.html`, // 若要修改在地址栏中访问的地址，则需要修改这里。比如如果想用localhost/html/xxx.html访问，则这里要写成html/${item}.html
+    template: path.resolve(config.alias.pages, `./${item}/main.html`),
+    chunks: ['vendor', 'manifest', item], // 指定包含哪些chunk(含JS和CSS)，不指定的话，它会包含打包后输出的所有chunk
     hash: false, // 为静态资源生成hash值
     chunksSortMode: 'dependency', // necessary to consistently work with multiple chunks via CommonsChunkPlugin
     inject: true

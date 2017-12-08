@@ -38,7 +38,6 @@ typeArr.forEach((type, index) => {
 
     globArr[type.name].found.forEach(filepath => {
         const moduleName = filepath.replace(new RegExp(`/${type.filename}.js`), '');
-        console.log(entryObj,type.name, 222222222)
 
         if(!entryObj[type.name]) {
             entryObj[type.name] = [];

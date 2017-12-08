@@ -26,7 +26,7 @@ let ret = {
     module: {},
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': config.prod.NODE_ENV
+            'process.env': config.prod.env
         }),
         // extract css into its own file
         new ExtractTextPlugin({
@@ -44,7 +44,7 @@ let ret = {
         new CopyWebpackPlugin([
             {
                 from: path.resolve(__dirname, '../src/assets'),
-                to: path.resolve(__dirname, config.assetsRoot),
+                to: config.assetsRoot,
                 ignore: ['.*']
             }
         ])
@@ -57,7 +57,7 @@ Object.keys(entryObj.page).map(item => {
      */
     // https://github.com/ampedandwired/html-webpack-plugin
     let htmlPlugin = new HtmlWebpackPlugin({
-        filename: `\/html\/${item}.html`,
+        filename: `html/${item}.html`, // 这里如果以斜杠开头，则前面那个.不能少（即以./开头，而不能以/开头），少了会报错：build 95% emitting Error: EACCES: permission denied, mkdir '/html'
         template: path.resolve(config.alias.pages, `./${item}/main.html`),
         chunks: ['vendor', 'manifest', item], //指定包含哪些chunk(含JS和CSS)，不指定的话，它会包含打包后输出的所有chunk
         hash: false, // 为静态资源生成hash值
