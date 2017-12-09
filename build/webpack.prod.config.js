@@ -44,7 +44,7 @@ let ret = {
             {
                 filepath: libFilePath,
                 outputPath: path.posix.join(config.dll.outputPath),
-                publicPath: config.dll.publicPath,
+                publicPath: config.dll.prod.publicPath,
                 includeSourcemap: false
             }
         ]),

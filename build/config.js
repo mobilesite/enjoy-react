@@ -40,12 +40,13 @@ module.exports = {
         ],
         manifestFilePrefix: 'manifest',
         outputPath: '/js/dll/', // 生成目录，是相对于assetsRoot的目录
-        publicPath: '/js/dll/',
         dev: {
-            basePath: path.resolve(__dirname, '../dll/dev') // 执行NODE_ENV=dev webpack --config  build/webpack.dll.conf.js --progress时的输出目录
+            basePath: path.resolve(__dirname, '../dll/dev'), // 执行NODE_ENV=dev webpack --config  build/webpack.dll.conf.js --progress时的输出目录
+            publicPath: '/dll/'
         },
         prod: {
-            basePath: path.resolve(__dirname, '../dll/prod') // 执行NODE_ENV=prod webpack --config build/webpack.dll.conf.js --progress时的输出目录
+            basePath: path.resolve(__dirname, '../dll/prod'), // 执行NODE_ENV=prod webpack --config build/webpack.dll.conf.js --progress时的输出目录
+            publicPath: '/js/dll/'
         }
     },
     dev: {
@@ -54,11 +55,11 @@ module.exports = {
             PORT: 80
         },
         proxyTable: {
-            '/dll/libs.js': {
+            '/dll/lib*.js': {
                 target: 'http://127.0.0.1:9090',
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/dll/': 'dll/dev/'
+                    '^/dll/': '/dll/dev/'
                 }
             }
         }

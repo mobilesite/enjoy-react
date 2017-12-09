@@ -69,14 +69,14 @@ compiler.plugin('compilation', function (compilation) {
 });
 
 // 将 proxyTable 中的请求配置挂在到启动的 express 服务上
-// Object.keys(proxyTable).forEach(function (context) {
-//   let options = proxyTable[context];
-//   // 如果 options 的数据类型为 string，则表示只设置了 url，所以需要将url设置为对象中的 target 的值
-//   if (typeof options === 'string') {
-//     options = { target: options };
-//   }
-//   app.use(proxyMiddleware(options.filter || context, options));
-// })
+Object.keys(proxyTable).forEach(function (context) {
+  let options = proxyTable[context];
+  // 如果 options 的数据类型为 string，则表示只设置了 url，所以需要将url设置为对象中的 target 的值
+  if (typeof options === 'string') {
+    options = { target: options };
+  }
+  app.use(proxyMiddleware(options.filter || context, options));
+})
 
 // 使用 connect-history-api-fallback 可以匹配资源，进行重定向等
 // 例如：
@@ -92,17 +92,10 @@ compiler.plugin('compilation', function (compilation) {
 // }
 // https://github.com/bripkens/connect-history-api-fallback
 // handle fallback for HTML5 history API
-
-console.log(config.dll.publicPath, new RegExp(config.dll.publicPath + libFileName + '$', 'g'))
-
 app.use(require('connect-history-api-fallback')(
   {
     index: '/index.html',  //覆盖默认的首页设置，默认是/index.html
     rewrites: [
-      {
-        from: new RegExp(config.dll.publicPath + libFileName + '$', 'g'),
-        to: config.dll.publicPath + libFileName
-      }
       // {
       //   from: /\/help$/,
       //   to: '/help.html'
@@ -128,7 +121,7 @@ const staticPath = path.posix.join(config.assetsPublicPath);
 // Mount the middleware at “/static” to serve static content only when their request path is prefixed with “/static”:
 app.use(staticPath, express.static('./static'));
 
-const uri = 'http://localhost:' + port;
+const uri = 'http://127.0.0.1:' + port;
 
 let _resolve;
 const readyPromise = new Promise(resolve => {
@@ -150,8 +143,8 @@ httpsServer.listen(443, function() {
 // waitUntilValid(callback) - executes the callback if the bundle is valid or after it is valid again
 // https://www.npmjs.com/package/webpack-dev-middleware
 devMiddleware.waitUntilValid(() => {
-  console.log('HTTP Server is running on: http://localhost:%s', port);
-  console.log('HTTPS Server is running on: https://localhost:%s', 443);
+  console.log('HTTP Server is running on: http://127.0.0.1:%s', port);
+  console.log('HTTPS Server is running on: https://127.0.0.1:%s', 443);
   _resolve();
 })
 

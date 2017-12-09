@@ -23,7 +23,7 @@ let plugins = [
       {
           filepath: libFilePath,
           outputPath: path.posix.join(config.dll.outputPath),
-          publicPath: config.dll.publicPath,
+          publicPath: config.dll.dev.publicPath,
           includeSourcemap: false
       }
   ]),
@@ -83,5 +83,5 @@ module.exports = merge(baseWebpackConfig, {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
   },
   devtool: 'eval-source-map',
-  plugins
+  plugins: plugins
 })
