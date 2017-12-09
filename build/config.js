@@ -5,7 +5,7 @@ const entryObj = require('./getEntries');
 
 module.exports = {
     assetsRoot: '../static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '//static.test.com/',
     alias: {
         actions: joinPath('src/actions'),
         assets: joinPath('src/assets'),
@@ -46,7 +46,7 @@ module.exports = {
         },
         prod: {
             basePath: path.resolve(__dirname, '../dll/prod'), // 执行NODE_ENV=prod webpack --config build/webpack.dll.conf.js --progress时的输出目录
-            publicPath: '/js/dll/'
+            publicPath: '//static.test.com/js/dll/'
         }
     },
     dev: {

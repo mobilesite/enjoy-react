@@ -51,7 +51,7 @@ let ret = {
 
         // extract css into its own file
         new ExtractTextPlugin({
-            filename: 'css/[name].[contenthash].css'
+            filename: 'css/[name].[contenthash:8].css'
         }),
 
         new UglifyJsParallelPlugin({

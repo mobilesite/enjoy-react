@@ -18,7 +18,7 @@ let ret = {
     },
     output: {
         path: path.resolve(__dirname, config.assetsRoot),
-        filename: '[name].js',
+        filename: '[name].[chunkhash:8].js',
         publicPath: config.assetsPublicPath,
     },
     resolve: {

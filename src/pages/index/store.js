@@ -16,10 +16,12 @@ const middleware = applyMiddleware(
     routeMiddleware
 );
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const store = createStore(
     reducer,
     undefined,
-    compose(middleware)
+    composeEnhancers(middleware)
 );
 
 sagaMiddleware.run(rootSaga);
