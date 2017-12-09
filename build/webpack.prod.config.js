@@ -15,6 +15,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const entryObj = require('./getEntries');
 const config = require('./config');
@@ -22,12 +23,30 @@ const utils = require('./utils');
 const joinPath = utils.joinPath;
 const baseConfig = require('./webpack.base.config');
 
+const { libFilePath, manifestFilePath } = require('./getDllFiles');
+
 let ret = {
-    module: {},
     plugins: [
         new webpack.DefinePlugin({
             'process.env': config.prod.env
         }),
+
+        new CleanWebpackPlugin(['./static']),
+
+        new webpack.DllReferencePlugin({
+            context: __dirname,
+            manifest: require(manifestFilePath)
+        }),
+    
+        new AddAssetHtmlPlugin([
+            {
+                filepath: libFilePath,
+                outputPath: path.posix.join(config.dll.outputPath),
+                publicPath: config.dll.publicPath,
+                includeSourcemap: false
+            }
+        ]),
+
         // extract css into its own file
         new ExtractTextPlugin({
             filename: 'css/[name].[contenthash].css'
@@ -37,7 +56,7 @@ let ret = {
             workers: os.cpus().length,
             mangle: true,
             compressor: config.prod.compressor,
-            sourceMap: config.prod.productionSourceMap
+            sourceMap: config.prod.SourceMap
         }),
 
         // copy custom static assets
@@ -60,8 +79,7 @@ Object.keys(entryObj.page).map(item => {
         filename: `html/${item}.html`, // 这里如果以斜杠开头，则前面那个.不能少（即以./开头，而不能以/开头），少了会报错：build 95% emitting Error: EACCES: permission denied, mkdir '/html'
         template: path.resolve(config.alias.pages, `./${item}/main.html`),
         chunks: ['vendor', 'manifest', item], //指定包含哪些chunk(含JS和CSS)，不指定的话，它会包含打包后输出的所有chunk
-        hash: false, // 为静态资源生成hash值
-        // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+        hash: false, 
         chunksSortMode: 'dependency',
         inject: true,
         minify: {
@@ -76,13 +94,14 @@ Object.keys(entryObj.page).map(item => {
     ret.plugins.push(htmlPlugin);
 });
 
-if (config.prod.productionGzip) {
+if (config.prod.Gzip) {
     ret.plugins.push(
+        // 在打包时Gzip，这样可以减少Nginx编码带来的性能消耗
         new CompressionWebpackPlugin({
             asset: '[path].gz[query]',
             algorithm: 'gzip',
             test: new RegExp(
-                '\\.(' + config.prod.productionGzipExtensions.join('|') + ')$'
+                '\\.(' + config.prod.GzipExtensions.join('|') + ')$'
             ),
             threshold: 10240,
             minRatio: 0.8
@@ -94,10 +113,16 @@ if (config.prod.bundleAnalyzerReport) {
     webpackConfig.plugins.push(new BundleAnalyzerPlugin());
 }
 
+if(!ret.module){
+    ret.module = {};
+}
+
 ret.module.rules = utils.styleLoaders({
     sourceMap: false,
     extract: true
 });
+
+ret.devtool = 'cheap-module-inline-source-map';
 
 ret = webpackMerge(baseConfig, ret);
 

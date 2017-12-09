@@ -1,25 +1,28 @@
 const webpack = require('webpack');
 const path = require('path');
+const rimraf = require('rimraf');
 const { joinPath } = require('./utils');
 
 const utils = require('./utils');
 const config = require('./config');
-const isDebug = process.env.NODE_ENV === 'development';
+const isProd = process.env.NODE_ENV === 'prod';
 
-const outputPath = isDebug
-    ? `${config.dll.dev.basePath}`
-    : `${config.dll.prod.basePath}`;
+const outputPath = isProd
+    ? `${config.dll.prod.basePath}`
+    : `${config.dll.dev.basePath}`;
+
+rimraf.sync(outputPath);
 
 const plugins = [
     new webpack.DllPlugin({
-        path: path.join(outputPath, 'manifest.json'), // 定义 manifest 文件生成的位置
+        path: path.join(outputPath, config.dll.manifestFilePrefix + '.[chunkhash:8].json'), // 定义 manifest 文件生成的位置
         name: '[name]', // dll bundle 输出到哪个全局变量上，和 output.library 一样即可。[name]的部分由entry的名字替换
         context: __dirname
     }),
     new webpack.optimize.OccurrenceOrderPlugin()
 ];
 
-if (!isDebug) {
+if (isProd) {
     plugins.push(
         new webpack.DefinePlugin({
             'process.env': config.prod.env
@@ -39,11 +42,11 @@ if (!isDebug) {
 
 let ret = {
     entry: {
-        lib: config.libEntry
+        [config.dll.libFilePrefix]: config.dll.libFileModules
     },
     output: {
         path: outputPath,
-        filename: '[name].js',
+        filename: '[name].[chunkhash:8].js',
         library: '[name]', // output.library将会定义为 window.${output.library}
         libraryTarget: 'umd',
         umdNamedDefine: true
@@ -55,7 +58,9 @@ let ret = {
     plugins: plugins
 }
 
-if(isDebug) {
+if(isProd) {
+    ret.devtool = 'cheap-module-inline-source-map';
+} else {
     ret.devtool = 'eval-source-map';
 }
 

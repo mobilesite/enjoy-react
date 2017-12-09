@@ -1,18 +1,32 @@
-var path = require('path');
-var utils = require('./utils');
-var webpack = require('webpack');
-var config = require('./config');
-var dllCfg = config.dev.dll;
-var merge = require('webpack-merge');
-var baseWebpackConfig = require('./webpack.base.config');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
-var AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const path = require('path');
+const utils = require('./utils');
+const webpack = require('webpack');
+const config = require('./config');
+const merge = require('webpack-merge');
+const baseWebpackConfig = require('./webpack.base.config');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const { libFilePath, manifestFilePath } = require('./getDllFiles');
 
-var plugins = [
+let plugins = [
   new webpack.DefinePlugin({
     'process.env': config.dev.env
   }),
+
+  new webpack.DllReferencePlugin({
+    context: __dirname,
+    manifest: require(manifestFilePath)
+  }),
+
+  new AddAssetHtmlPlugin([
+      {
+          filepath: libFilePath,
+          outputPath: path.posix.join(config.dll.outputPath),
+          publicPath: config.dll.publicPath,
+          includeSourcemap: false
+      }
+  ]),
 
   // split vendor js into its own file
   new webpack.optimize.CommonsChunkPlugin({
@@ -36,8 +50,6 @@ var plugins = [
   }),
 
   new webpack.optimize.OccurrenceOrderPlugin(),
-
-  // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
   new webpack.HotModuleReplacementPlugin(),
   new webpack.NoEmitOnErrorsPlugin(),
   new FriendlyErrorsPlugin()
@@ -51,15 +63,15 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 Object.keys(config.entryObj.page).map((item) => {
   /**
    * 将抽取好的js和css公用文件插入到html页面中
+   * 文档：https://github.com/ampedandwired/html-webpack-plugin
    */
-  // https://github.com/ampedandwired/html-webpack-plugin
-  console.log('>>>>>>>>>>\n 每一个页面的名称:', item);
-  var htmlPlugin = new HtmlWebpackPlugin({
+  console.log('【每一个页面的名称】:', item);
+  const htmlPlugin = new HtmlWebpackPlugin({
     filename: `${item}.html`, // 若要修改在地址栏中访问的地址，则需要修改这里。比如如果想用localhost/html/xxx.html访问，则这里要写成html/${item}.html
     template: path.resolve(config.alias.pages, `./${item}/main.html`),
     chunks: ['vendor', 'manifest', item], // 指定包含哪些chunk(含JS和CSS)，不指定的话，它会包含打包后输出的所有chunk
     hash: false, // 为静态资源生成hash值
-    chunksSortMode: 'dependency', // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+    chunksSortMode: 'dependency', // 这个选项决定了 script 标签的引用顺序，'dependency' 指按照不同文件的依赖关系来排序
     inject: true
   });
 
@@ -70,7 +82,6 @@ module.exports = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
   },
-  // cheap-module-eval-source-map is faster for development
-  devtool: '#cheap-module-eval-source-map',
-  plugins: plugins
+  devtool: 'eval-source-map',
+  plugins
 })

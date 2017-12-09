@@ -24,23 +24,33 @@ module.exports = {
             require('autoprefixer')
         ]
     },
-    libEntry: ['react', 'react-dom', 'history', 'react-router', 'react-router-dom', 'react-router-redux', 'redux', 'react-redux', 'redux-saga'],
+    
     dll: {
-        
-        fileName: 'lib.js',
-        manifestFileName: 'manifest.json',
+        libFilePrefix: 'lib',
+        libFileModules: [
+            'react', 
+            'react-dom', 
+            'history', 
+            'react-router', 
+            'react-router-dom', 
+            'react-router-redux', 
+            'redux', 
+            'react-redux', 
+            'redux-saga'
+        ],
+        manifestFilePrefix: 'manifest',
         outputPath: '/js/dll/', // 生成目录，是相对于assetsRoot的目录
         publicPath: '/js/dll/',
         dev: {
-            basePath: path.resolve(__dirname, '../dll/dev') // 执行NODE_ENV=development webpack --config  build/webpack.dll.conf.js --progress时的输出目录
+            basePath: path.resolve(__dirname, '../dll/dev') // 执行NODE_ENV=dev webpack --config  build/webpack.dll.conf.js --progress时的输出目录
         },
         prod: {
-            basePath: path.resolve(__dirname, '../dll/prod') // 执行NODE_ENV=production webpack --config build/webpack.dll.conf.js --progress时的输出目录
+            basePath: path.resolve(__dirname, '../dll/prod') // 执行NODE_ENV=prod webpack --config build/webpack.dll.conf.js --progress时的输出目录
         }
     },
     dev: {
         env: {
-            NODE_ENV: JSON.stringify('development'),
+            NODE_ENV: JSON.stringify('dev'),
             PORT: 80
         },
         proxyTable: {
@@ -60,17 +70,17 @@ module.exports = {
     },
     prod: {
         env: {
-            NODE_ENV: JSON.stringify('production')
+            NODE_ENV: JSON.stringify('prod')
         },
-        productionGzip: false, // 是否开启Gzip
-        productionGzipExtensions: ['js', 'css'], // Gzip后缀名
+        Gzip: false, // 是否开启Gzip
+        GzipExtensions: ['js', 'css'], // Gzip后缀名
         bundleAnalyzerReport: process.env.npm_config_report, // ??process.env.npm_config_report获取的是--report参数吗
         compressor: {
             warnings: false,
             drop_console: true,
             drop_debugger: true
         },
-        productionSourceMap: false // 是否生成source map
+        SourceMap: false // 是否生成source map
     },
     entryObj
 }

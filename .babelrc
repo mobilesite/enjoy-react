@@ -1,6 +1,6 @@
 {
     "presets": [
-        ["env", { "modules": false }],
+        ["env", { "modules": false }], //"modules": false是用来做Tree Shaking的
         "react"
     ],
     "plugins": [

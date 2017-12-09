@@ -1,52 +1,43 @@
-var config = require('./config');
+const config = require('./config');
 
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV);
 };
 
-var path = require('path');
-var express = require('express');
-var webpack = require('webpack');
+const { libFileName } = require('./getDllFiles');
 
-var fs = require('fs');
-var http = require('http');
-var https = require('https');
-var privateKey = fs.readFileSync(path.join(__dirname, './certificate/private.pem'), 'utf8');
-var certificate = fs.readFileSync(path.join(__dirname, './certificate/file.crt'), 'utf8');
-var credentials = {key: privateKey, cert: certificate};
+const path = require('path');
+const express = require('express');
+const webpack = require('webpack');
+
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+const privateKey = fs.readFileSync(path.join(__dirname, './certificate/private.pem'), 'utf8');
+const certificate = fs.readFileSync(path.join(__dirname, './certificate/file.crt'), 'utf8');
+const credentials = {key: privateKey, cert: certificate};
 
 // https://www.npmjs.com/package/http-proxy-middleware
 // app.use('/api', proxy({target: 'http://www.example.org', changeOrigin: true}));
 // http://localhost:3000/api/foo/bar -> http://www.example.org/api/foo/bar
-var proxyMiddleware = require('http-proxy-middleware');
+const proxyMiddleware = require('http-proxy-middleware');
 
 // 测试环境，使用的配置与生产环境的配置一样
 // 非测试环境，即为开发环境，因为此文件只有测试环境和开发环境使用
-var webpackConfig = process.env.NODE_ENV === 'test'
+const webpackConfig = process.env.NODE_ENV === 'test'
   ? require('./webpack.prod.config')
   : require('./webpack.dev.config');
 
-var port = process.env.PORT || config.dev.env.PORT;
+const port = process.env.PORT || config.dev.env.PORT;
 
 // Define proxies
 // https://github.com/chimurai/http-proxy-middleware
 // 读入config目录下的proxyTable配置
-var proxyTable = config.dev.proxyTable;
+const proxyTable = config.dev.proxyTable;
 
-var app = express();
+const app = express();
 
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
-httpServer.listen(port, function() {
-    console.log('HTTP Server is running on: http://localhost:%s', port);
-});
-
-let httpsPort = 443;
-httpsServer.listen(httpsPort, function() {
-    console.log('HTTPS Server is running on: https://localhost:%s', httpsPort);
-});
-
-var compiler = webpack(webpackConfig);
+const compiler = webpack(webpackConfig);
 
 /**
  * webpack-dev-middleware
@@ -56,12 +47,12 @@ var compiler = webpack(webpackConfig);
  * @param compiler - a webpack compiler
  * @param options - 配置选项
  */
-var devMiddleware = require('webpack-dev-middleware')(compiler, {
+const devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath, //必填
   quiet: true // 为true时将不展示打包时的一些详细信息，使得终端更加简洁
 })
 
-var hotMiddleware = require('webpack-hot-middleware')(compiler, {
+const hotMiddleware = require('webpack-hot-middleware')(compiler, {
   log: false,
   heartbeat: 2000
 });
@@ -78,14 +69,14 @@ compiler.plugin('compilation', function (compilation) {
 });
 
 // 将 proxyTable 中的请求配置挂在到启动的 express 服务上
-Object.keys(proxyTable).forEach(function (context) {
-  var options = proxyTable[context];
-  // 如果 options 的数据类型为 string，则表示只设置了 url，所以需要将url设置为对象中的 target 的值
-  if (typeof options === 'string') {
-    options = { target: options };
-  }
-  app.use(proxyMiddleware(options.filter || context, options));
-})
+// Object.keys(proxyTable).forEach(function (context) {
+//   let options = proxyTable[context];
+//   // 如果 options 的数据类型为 string，则表示只设置了 url，所以需要将url设置为对象中的 target 的值
+//   if (typeof options === 'string') {
+//     options = { target: options };
+//   }
+//   app.use(proxyMiddleware(options.filter || context, options));
+// })
 
 // 使用 connect-history-api-fallback 可以匹配资源，进行重定向等
 // 例如：
@@ -101,10 +92,17 @@ Object.keys(proxyTable).forEach(function (context) {
 // }
 // https://github.com/bripkens/connect-history-api-fallback
 // handle fallback for HTML5 history API
+
+console.log(config.dll.publicPath, new RegExp(config.dll.publicPath + libFileName + '$', 'g'))
+
 app.use(require('connect-history-api-fallback')(
   {
     index: '/index.html',  //覆盖默认的首页设置，默认是/index.html
     rewrites: [
+      {
+        from: new RegExp(config.dll.publicPath + libFileName + '$', 'g'),
+        to: config.dll.publicPath + libFileName
+      }
       // {
       //   from: /\/help$/,
       //   to: '/help.html'
@@ -121,7 +119,7 @@ app.use(devMiddleware);
 app.use(hotMiddleware);
 
 // serve pure static assets
-var staticPath = path.posix.join(config.assetsPublicPath);
+const staticPath = path.posix.join(config.assetsPublicPath);
 //console.log('>>>>>>>>>>\n staticPath:', staticPath);
 
 // 对于访问config.dev.assetsPublicPath/config.assetsSubDirectory(如/static)下的内容，都执行express.static('./static')。大意：请求文件包含/static的时候，才从./static下面提供静态文件服务
@@ -130,29 +128,36 @@ var staticPath = path.posix.join(config.assetsPublicPath);
 // Mount the middleware at “/static” to serve static content only when their request path is prefixed with “/static”:
 app.use(staticPath, express.static('./static'));
 
-var uri = 'http://localhost:' + port;
+const uri = 'http://localhost:' + port;
 
-var _resolve;
-var readyPromise = new Promise(resolve => {
+let _resolve;
+const readyPromise = new Promise(resolve => {
   _resolve = resolve;
 });
 
-console.log('>>>>>>>>>>\n Starting dev server...');
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(port, function() {
+    
+});
+
+httpsServer.listen(443, function() {
+    
+});
 
 // 打包成功后进行提示信息输出和启动浏览器等操作
 // waitUntilValid(callback) - executes the callback if the bundle is valid or after it is valid again
 // https://www.npmjs.com/package/webpack-dev-middleware
 devMiddleware.waitUntilValid(() => {
-  console.log('>>>>>>>>>>\n Listening at ' + uri + '\n');
+  console.log('HTTP Server is running on: http://localhost:%s', port);
+  console.log('HTTPS Server is running on: https://localhost:%s', 443);
   _resolve();
 })
 
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
-
 module.exports = {
   ready: readyPromise, // 抛出promise
-  close: () => {  // 抛出关闭服务器方法
+  close: () => {       // 抛出关闭服务器方法
     httpServer.close();
     httpsServer.close();
   }

@@ -1,4 +1,5 @@
 const path = require('path');
+const glob = require('glob');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 /**
@@ -23,7 +24,7 @@ function cssLoaders(options) {
     var cssLoader = {
         loader: 'css-loader',
         options: {
-            minimize: process.env.NODE_ENV === 'production',
+            minimize: process.env.NODE_ENV === 'prod',
             sourceMap: options.sourceMap
         }
     };
@@ -47,15 +48,10 @@ function cssLoaders(options) {
             });
         }
 
-        // 当options.extract选项为true时，要进行ExtractTextPlugin
-        // Extract CSS when that option is specified
-        // (which is the case during production build)
+        // 当options.extract选项为true时，要进行ExtractTextPlugin，在prod环境构建会传入options.extract=true
         if (options.extract) {
             return ExtractTextPlugin.extract({
-                use: loaders,
-                // vue-style-loader是style-loader的fork，和style-loader类似, 也能动态地将CSS以style标签的形式插入到HTML文档中. https://www.npmjs.com/package/vue-style-loader
-                // 存疑：?? 不用vue的时候是否可以用这个loader
-                // fallback: 'vue-style-loader'
+                use: loaders
             });
         } else {
             return loaders;
@@ -88,8 +84,16 @@ function styleLoaders(options) {
     return output;
 };
 
+// get filename with some prefix and aome suffix in some directory
+function getFilename(prefix, suffix, directory) {
+    return new glob.Glob('**/' + prefix + '*' + suffix, {
+        cwd: directory,
+        sync: true // 这里不能异步，只能同步
+    }).found[0]
+}
 
 module.exports = {
     joinPath,
-    styleLoaders
+    styleLoaders,
+    getFilename
 }

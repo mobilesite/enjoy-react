@@ -1,4 +1,3 @@
-console.log(1111)
 const webpack = require('webpack');
 const path = require('path');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin'); //显示打包进度条
@@ -11,11 +10,10 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const config = require('./config');
 const utils = require('./utils');
 const joinPath = utils.joinPath;
-const isDebug = process.env.NODE_ENV === 'development';
 
 let ret = {
     entry: {
-        ...config.libEntry,
+        ...config.dll.libFileModules,
         ...config.entryObj.page
     },
     output: {
@@ -83,53 +81,16 @@ let ret = {
     plugins: [
         new ProgressBarPlugin(),
         new FriendlyErrorsPlugin(),
-        new webpack.optimize.ModuleConcatenationPlugin(),//webpack2处理后的每个模块均被一个函数包裹,这样会带来一个问题：降低浏览器中JS执行效率，这主要是闭包函数降低了JS引擎解析速度。于是webpack 3参考Closure Compiler和Rollup JS，将一些有联系的模块，放到一个闭包函数里面去，通过减少闭包函数数量从而加快JS的执行速度。 Concatenation串联
+        /**
+         webpack2处理后的每个模块均被一个函数包裹,这样会带来一个问题：降低浏览器中JS执行效率，这主要是闭包函数降低了JS引擎解析速度。于是webpack 3参考Closure Compiler和Rollup JS，将一些有联系的模块，放到一个闭包函数里面去，通过减少闭包函数数量从而加快JS的执行速度。Concatenation意指串联
+         */
+        new webpack.optimize.ModuleConcatenationPlugin(), 
         // new HappyPack({
         //     id: 'happybabel',
         //     loaders: ['babel-loader'],
         //     threadPool: happyThreadPool,
         //     cache: true,
         //     verbose: true
-        // }),
-        // webpack dllplugin
-        new webpack.DllReferencePlugin({
-            context: __dirname,
-            manifest: require(path.resolve(
-                config.dll.prod.basePath,
-                config.dll.manifestFileName
-            ))
-        }),
-
-        new AddAssetHtmlPlugin([
-            {
-                filepath: path.resolve(config.dll.prod.basePath, config.dll.fileName),
-                outputPath: path.posix.join(config.dll.outputPath),
-                publicPath: config.dll.publicPath,
-                includeSourcemap: false
-            }
-        ]),
-
-        // split vendor js into its own file
-        // 这个plugin的顺序必须在上一个之后，否则会报错：CommonsChunkPlugin: While running in normal mode it's not allowed to use a non-entry chunk
-        // new webpack.optimize.CommonsChunkPlugin({
-        //     name: 'vendor',
-        //     minChunks: function(module, count) {
-        //         // any required modules inside node_modules are extracted to vendor
-        //         return (
-        //             module.resource &&
-        //             /\.js$/.test(module.resource) &&
-        //             module.resource.indexOf(
-        //                 path.join(__dirname, '../node_modules')
-        //             ) === 0
-        //         );
-        //     }
-        // }),
-
-        // // extract webpack runtime and module manifest to its own file in order to
-        // // prevent vendor hash from being updated whenever app bundle is updated
-        // new webpack.optimize.CommonsChunkPlugin({
-        //     name: 'manifest',
-        //     chunks: ['vendor']
         // }),
 
         new webpack.optimize.OccurrenceOrderPlugin(),
@@ -143,11 +104,5 @@ let ret = {
         }),
     ]
 }
-
-if(isDebug){
-    ret.devtool = '#eval-source-map';
-}
-
-console.log(ret);
 
 module.exports = ret;
