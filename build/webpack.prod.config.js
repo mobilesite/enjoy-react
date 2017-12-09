@@ -31,7 +31,9 @@ let ret = {
             'process.env': config.prod.env
         }),
 
-        new CleanWebpackPlugin(['./static']),
+        new CleanWebpackPlugin(['./static'], {
+            root: path.resolve(__dirname, '..')
+        }),
 
         new webpack.DllReferencePlugin({
             context: __dirname,
