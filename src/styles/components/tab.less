@@ -2,12 +2,12 @@
 
 .ej-tab__menu{
     position: relative;
-    height: @ej-height-list-tab;
+    height: @ej-height-navbar;
 }
 .ej-tab__menu-inner{
     display: flex;
     z-index: 999;
-    background-color: @ej-color-list-tab-bg;
+    background-color: @ej-color-navbar-bg;
     position: sticky;
     font-size: 14px;
     border-bottom: 1px solid #E5E5E8;
@@ -25,11 +25,11 @@
         border-bottom: 2px solid @ej-color-primary;
     }
 }
-.theme-test{
+.theme-red{
     .ej-tab__menu-inner--active{
-        color: @ej-color-primary-test;
+        color: @ej-color-primary-red;
         &:after{
-            border-bottom: 2px solid @ej-color-primary-test;
+            border-bottom: 2px solid @ej-color-primary-red;
         }
     }
 }
@@ -46,7 +46,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: @ej-height-list-tab;
+    height: @ej-height-navbar;
     color: @ej-color-text-gray;
 
     .mixin-set-tap-color();

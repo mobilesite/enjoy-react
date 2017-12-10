@@ -6,7 +6,8 @@
         "react-optimize"
     ],
     "plugins": [
-        "transform-decorators-legacy"  //支持装饰器语法
+        "transform-decorators-legacy",  //支持装饰器语法
+        "transform-class-properties"    //属性初始化器语法
     ],
     "comments": false
 }

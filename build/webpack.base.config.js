@@ -22,27 +22,49 @@ let ret = {
         publicPath: config.assetsPublicPath,
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.less'],
+        extensions: ['.tsx', '.js', '.jsx', '.less'],
         alias: config.alias
     },
     module: {
         rules: [
-            {
-                test: /\.(js|jsx)$/,
-                loader: 'eslint-loader',
-                enforce: 'pre',
-                include: [
-                    joinPath('src'), 
-                    joinPath('dll'), 
-                    joinPath('test')
-                ], 
-                options: {
-                    formatter: require('eslint-friendly-formatter')
-                }
-            },
+            // {
+            //     test: /\.(js|jsx)$/,
+            //     loader: 'eslint-loader',
+            //     enforce: 'pre',
+            //     include: [
+            //         joinPath('src'), 
+            //         joinPath('dll'), 
+            //         joinPath('test')
+            //     ], 
+            //     options: {
+            //         formatter: require('eslint-friendly-formatter')
+            //     }
+            // },
             {
                 test: /\.js|jsx$/,
                 loader: 'babel-loader',
+                // loader: 'happypack/loader?id=happybabel',
+                include: [
+                    joinPath('src'), 
+                    joinPath('dll'), 
+                    joinPath('test'),
+                    joinPath('node_modules')
+                ]
+            },
+            {
+                test: /\.tsx$/,
+                use: [
+                    {
+                        loader: 'babel-loader'
+                    },
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                          transpileOnly: true,
+                        },
+                    },
+                ],
+                
                 // loader: 'happypack/loader?id=happybabel',
                 include: [
                     joinPath('src'), 

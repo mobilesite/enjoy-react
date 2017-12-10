@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "strictNullChecks": true,
+        "moduleResolution": "node",
+        "jsx": "preserve",
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "es6",
+        "types": ["classnames", "react", "react-dom"]
+    },
+    "include": [
+        "src/**/*",
+        "dll/**/*",
+        "test/**/*"
+    ],
+    "exclude": ["node_modules"],
+    "compileOnSave": false
+}

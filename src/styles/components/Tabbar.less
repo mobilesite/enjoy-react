@@ -1,6 +1,6 @@
 @import "../base.less";
 
-.ej-footer-nav{
+.ej-tabbar{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,22 +8,22 @@
     width: 100%;
     height: 100%;
 }
-.ej-footer-nav__menu {
+.ej-tabbar__menu {
     display: flex;
     z-index: 999;
-    height: @ej-height-footer-nav;
+    height: @ej-height-tabbar;
     width: 100%;
-    background-color: @ej-color-footer-nav-bg;
-    box-shadow: @ej-shadow-footer-nav;
+    background-color: @ej-color-tabbar-bg;
+    box-shadow: @ej-shadow-tabbar;
     font-size: 11px;
     color: @ej-color-text-gray;
 }
-.ej-footer-nav__menu-item{
+.ej-tabbar__menu-item{
     position: relative;
     flex: 1;
     cursor: pointer;
     .mixin-set-tap-color();
-    height: @ej-height-footer-nav;
+    height: @ej-height-tabbar;
 
     
 
@@ -41,18 +41,18 @@
     }
 }
 
-.ej-footer-nav__menu-item--active{
-    .ej-footer-nav__menu-text{
+.ej-tabbar__menu-item--active{
+    .ej-tabbar__menu-text{
         color: @ej-color-primary;
     }
 }
 
-.ej-footer-nav__menu-icon{
+.ej-tabbar__menu-icon{
     margin-top: -2px;
     width: 100%;
     display: block;
 }
-.ej-footer-nav__menu-text{
+.ej-tabbar__menu-text{
     margin-top: -2px;
     width: 100%;
     display: block;
@@ -60,31 +60,31 @@
     color: @ej-color-text-dark;
 }
 
-.ej-footer-nav__pane{
+.ej-tabbar__pane{
     flex: 1;
     width: 100%;
     overflow-y: auto;
 }
 
-.theme-test{
-    .ej-footer-nav__menu-item--active{
-        .ej-footer-nav__menu-text{
-            color: @ej-color-primary-test;
+.theme-red{
+    .ej-tabbar__menu-item--active{
+        .ej-tabbar__menu-text{
+            color: @ej-color-primary-red;
         }
     }
 
-    .ej-footer-nav__menu-item:first-child {
-        &.ej-footer-nav__menu-item--active {
+    .ej-tabbar__menu-item:first-child {
+        &.ej-tabbar__menu-item--active {
             &:before {
-                color: @ej-color-primary-test;
+                color: @ej-color-primary-red;
             }
         }
     }
 
-    .ej-footer-nav__menu-item:last-child {
-        &.ej-footer-nav__menu-item--active {
+    .ej-tabbar__menu-item:last-child {
+        &.ej-tabbar__menu-item--active {
             &:before {
-                color: @ej-color-primary-test;
+                color: @ej-color-primary-red;
             }
         }
     }

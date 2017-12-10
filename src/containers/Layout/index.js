@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import TopNav from '../../components/TopNav';
-import FooterNav from '../../components/FooterNav';
+import Navbar from '../../components/Navbar';
+import Tabbar from '../../components/Tabbar';
+import Icon from '../../components/Icon';
 
 @connect(store => {
     return {};
@@ -11,13 +12,25 @@ export default class Layout extends React.Component {
     componentWillMount() {
 
     }
+    
+    onLeftClick = () => {
+        alert('left clicked')
+    }
 
     render() {
+        
         return (
             <div>
-                <TopNav/>
+                <Navbar
+                    mode="dark"
+                    leftContent="back"
+                    onLeftClick={this.onLeftClick}
+                    rightContent={<Icon type="ellipsis" />}
+                >
+                    Enjoy UI
+                </Navbar>
                 {this.props.children}
-                <FooterNav/>
+                <Tabbar/>
             </div>
         )
     }

@@ -1,0 +1,31 @@
+.ej-navbar{
+    display: flex;
+    align-items: center;
+    height: @ej-height-navbar;
+    
+
+    &--light{
+        background-color: #fff;color: @ej-color-text-gray;
+    }
+    &--dark{
+        background-color: @ej-color-primary;
+        color: #fff;
+    }
+
+    &__left{
+        margin-right: @ej-space-h-sm;
+        padding-left: @ej-space-h-lg;
+        font-size: @ej-fontsize-link-button;
+    }
+    &__center{
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        font-size: @ej-fontsize-navbar-title;
+    }
+    &__right{
+        margin-left: @ej-space-h-sm;
+        padding-right: @ej-space-h-lg;
+        font-size: @ej-fontsize-link-button;
+    }
+}

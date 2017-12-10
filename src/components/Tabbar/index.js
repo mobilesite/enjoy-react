@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
     return {}
 })
 
-export default class FooterNav extends Component {
+export default class Tabbar extends Component {
     componentWillMount() {
 
     }
