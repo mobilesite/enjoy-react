@@ -4,10 +4,10 @@ const utils = require('./utils');
 
 let env;
 
-if(process.env.NODE_ENV === 'prod') {
-    env = 'prod'
+if(process.env.NODE_ENV === 'development') {
+    env = 'development'
 } else {
-    env = 'dev'
+    env = 'production'
 };
 
 const libFileName = utils.getFilename(

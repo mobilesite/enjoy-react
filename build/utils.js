@@ -24,7 +24,7 @@ function cssLoaders(options) {
     var cssLoader = {
         loader: 'css-loader',
         options: {
-            minimize: process.env.NODE_ENV === 'prod',
+            minimize: process.env.NODE_ENV !== 'development',
             sourceMap: options.sourceMap
         }
     };
@@ -48,7 +48,7 @@ function cssLoaders(options) {
             });
         }
 
-        // 当options.extract选项为true时，要进行ExtractTextPlugin，在prod环境构建会传入options.extract=true
+        // 当options.extract选项为true时，要进行ExtractTextPlugin，在production环境构建会传入options.extract=true
         if (options.extract) {
             return ExtractTextPlugin.extract({
                 use: loaders

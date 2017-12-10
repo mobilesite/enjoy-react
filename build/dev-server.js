@@ -1,7 +1,7 @@
 const config = require('./config');
 
 if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV);
+  process.env.NODE_ENV = JSON.parse(config.development.env.NODE_ENV);
 };
 
 const { libFileName } = require('./getDllFiles');
@@ -25,15 +25,15 @@ const proxyMiddleware = require('http-proxy-middleware');
 // 测试环境，使用的配置与生产环境的配置一样
 // 非测试环境，即为开发环境，因为此文件只有测试环境和开发环境使用
 const webpackConfig = process.env.NODE_ENV === 'test'
-  ? require('./webpack.prod.config')
-  : require('./webpack.dev.config');
+  ? require('./webpack.production.config')
+  : require('./webpack.development.config');
 
-const port = process.env.PORT || config.dev.env.PORT;
+const port = process.env.PORT || config.development.env.PORT;
 
 // Define proxies
 // https://github.com/chimurai/http-proxy-middleware
 // 读入config目录下的proxyTable配置
-const proxyTable = config.dev.proxyTable;
+const proxyTable = config.development.proxyTable;
 
 const app = express();
 
@@ -113,12 +113,7 @@ app.use(hotMiddleware);
 
 // serve pure static assets
 const staticPath = path.posix.join(config.assetsPublicPath);
-//console.log('>>>>>>>>>>\n staticPath:', staticPath);
 
-// 对于访问config.dev.assetsPublicPath/config.assetsSubDirectory(如/static)下的内容，都执行express.static('./static')。大意：请求文件包含/static的时候，才从./static下面提供静态文件服务
-// express.static(root, [options])
-// The root argument refers to the root directory from which the static assets are to be served
-// Mount the middleware at “/static” to serve static content only when their request path is prefixed with “/static”:
 app.use(staticPath, express.static('./static'));
 
 const uri = 'http://127.0.0.1:' + port;

@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dll-dev-win": "cross-env NODE_ENV=dev ./node_modules/.bin/webpack --config ./build/webpack.dll.config.js --progress && npm run dev",
-    "dll-dev": "cross-env NODE_ENV=dev ./node_modules/.bin/webpack --config ./build/webpack.dll.config.js --progress && sudo npm run dev",
-    "dev": "cross-env NODE_ENV=dev node build/dev-server.js",
-    "dll-build": "cross-env NODE_ENV=prod ./node_modules/.bin/webpack --config ./build/webpack.dll.config.js --progress && npm run build",
-    "build": "cross-env NODE_ENV=prod ./node_modules/.bin/webpack --config ./build/webpack.prod.config.js --progress"
+    "dll-dev-win": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./build/webpack.dll.config.js --progress && npm run dev",
+    "dll-dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./build/webpack.dll.config.js --progress && sudo npm run dev",
+    "dev": "cross-env NODE_ENV=development node build/dev-server.js",
+    "dll-build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./build/webpack.dll.config.js --progress && npm run build",
+    "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./build/webpack.production.config.js --progress"
   },
   "author": "",
   "license": "MIT",
@@ -20,6 +20,8 @@
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "babel-preset-react-optimize": "^1.0.1",
+    "babel-preset-stage-0": "^6.24.1",
     "clean-webpack-plugin": "^0.1.17",
     "compression-webpack-plugin": "^1.0.1",
     "connect-history-api-fallback": "^1.5.0",

@@ -18,7 +18,7 @@ let ret = {
     },
     output: {
         path: path.resolve(__dirname, config.assetsRoot),
-        filename: '[name].[chunkhash:8].js',
+        filename: process.env.NODE_ENV === 'development' ? '[name].[hash:7].js' : '[name].[chunkhash:7].js', // 热加载的时候不能用chunkhash，所以只能用hash
         publicPath: config.assetsPublicPath,
     },
     resolve: {
@@ -31,12 +31,11 @@ let ret = {
                 test: /\.(js|jsx)$/,
                 loader: 'eslint-loader',
                 enforce: 'pre',
-                // include: [
-                //     joinPath('src'), 
-                //     joinPath('dll'), 
-                //     joinPath('test'),
-                //     joinPath('node_modules')
-                // ], 
+                include: [
+                    joinPath('src'), 
+                    joinPath('dll'), 
+                    joinPath('test')
+                ], 
                 options: {
                     formatter: require('eslint-friendly-formatter')
                 }

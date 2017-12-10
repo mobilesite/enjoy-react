@@ -24,7 +24,7 @@ export default class Wrapper extends React.Component {
                 <Switch key={location.path}>
                     <Layout>
                         <Route exact path="/" component={Home}/>
-                        <Route component={NotFound}/>
+                        {/* <Route component={NotFound}/> */}
                     </Layout>
                 </Switch>
             </ConnectedRouter>

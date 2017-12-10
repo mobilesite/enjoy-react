@@ -28,7 +28,7 @@ const { libFilePath, manifestFilePath } = require('./getDllFiles');
 let ret = {
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': config.prod.env
+            'process.env': config.production.env
         }),
 
         new CleanWebpackPlugin(['./static'], {
@@ -44,21 +44,47 @@ let ret = {
             {
                 filepath: libFilePath,
                 outputPath: path.posix.join(config.dll.outputPath),
-                publicPath: config.dll.prod.publicPath,
+                publicPath: config.dll.publicPath,
                 includeSourcemap: false
             }
         ]),
 
+        /**
+         * 如果嫌一进页面加载的js过多，可以考虑把下面这两个plugin去掉，因为他们会多增加两个js文件：
+         * vendor.xxx.js和manifest.xxx.js
+         * 他们是在dll的基础上进行的，不会与dll的提取相冲突
+         */
+        // split vendor js into its own file
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            minChunks: function (module, count) {
+                // any required modules inside node_modules are extracted to vendor
+                return (
+                    module.resource &&
+                    /\.js$/.test(module.resource) &&
+                    module.resource.indexOf(
+                        path.join(__dirname, '../node_modules')
+                    ) === 0
+                )
+            }
+        }),
+        // extract webpack runtime and module manifest to its own file in order to
+        // prevent vendor hash from being updated whenever app bundle is updated
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'manifest',
+            chunks: ['vendor']
+        }),
+
         // extract css into its own file
         new ExtractTextPlugin({
-            filename: 'css/[name].[contenthash:8].css'
+            filename: 'css/[name].[contenthash:7].css'
         }),
 
         new UglifyJsParallelPlugin({
             workers: os.cpus().length,
             mangle: true,
-            compressor: config.prod.compressor,
-            sourceMap: config.prod.SourceMap
+            compressor: config.production.compressor,
+            sourceMap: config.production.SourceMap
         }),
 
         // copy custom static assets
@@ -96,14 +122,14 @@ Object.keys(entryObj.page).map(item => {
     ret.plugins.push(htmlPlugin);
 });
 
-if (config.prod.Gzip) {
+if (config.production.Gzip) {
     ret.plugins.push(
         // 在打包时Gzip，这样可以减少Nginx编码带来的性能消耗
         new CompressionWebpackPlugin({
             asset: '[path].gz[query]',
             algorithm: 'gzip',
             test: new RegExp(
-                '\\.(' + config.prod.GzipExtensions.join('|') + ')$'
+                '\\.(' + config.production.GzipExtensions.join('|') + ')$'
             ),
             threshold: 10240,
             minRatio: 0.8
@@ -111,7 +137,7 @@ if (config.prod.Gzip) {
     );
 }
 
-if (config.prod.bundleAnalyzerReport) {
+if (config.production.bundleAnalyzerReport) {
     webpackConfig.plugins.push(new BundleAnalyzerPlugin());
 }
 

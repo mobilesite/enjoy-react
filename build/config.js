@@ -40,26 +40,26 @@ module.exports = {
         ],
         manifestFilePrefix: 'manifest',
         outputPath: '/js/dll/', // 生成目录，是相对于assetsRoot的目录
-        dev: {
-            basePath: path.resolve(__dirname, '../dll/dev'), // 执行NODE_ENV=dev webpack --config  build/webpack.dll.conf.js --progress时的输出目录
-            publicPath: '/dll/'
+        publicPath: '//static.test.com/js/dll/',
+        development: {
+            basePath: path.resolve(__dirname, '../dll/development') // 执行NODE_ENV=development webpack --config  build/webpack.dll.conf.js --progress时的输出目录
+            
         },
-        prod: {
-            basePath: path.resolve(__dirname, '../dll/prod'), // 执行NODE_ENV=prod webpack --config build/webpack.dll.conf.js --progress时的输出目录
-            publicPath: '//static.test.com/js/dll/'
+        production: {
+            basePath: path.resolve(__dirname, '../dll/production') // 执行NODE_ENV=production webpack --config build/webpack.dll.conf.js --progress时的输出目录
         }
     },
-    dev: {
+    development: {
         env: {
-            NODE_ENV: JSON.stringify('dev'),
+            NODE_ENV: JSON.stringify('development'),
             PORT: 80
         },
         proxyTable: {
-            '/dll/lib*.js': {
+            '/js/dll/lib*.js': {
                 target: 'http://127.0.0.1:9090',
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/dll/': '/dll/dev/'
+                    '^/js/dll/': '/dll/development/'
                 }
             }
         }
@@ -69,9 +69,9 @@ module.exports = {
             NODE_ENV: JSON.stringify('test')
         }
     },
-    prod: {
+    production: {
         env: {
-            NODE_ENV: JSON.stringify('prod')
+            NODE_ENV: JSON.stringify('production') //必须用production，否则会报错：Warning: It looks like you're using a minified copy of the development build of React. When deploying React apps to production, make sure to use the production build which skips development warnings and is faster. 
         },
         Gzip: false, // 是否开启Gzip
         GzipExtensions: ['js', 'css'], // Gzip后缀名

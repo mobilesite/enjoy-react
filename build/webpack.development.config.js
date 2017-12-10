@@ -11,7 +11,7 @@ const { libFilePath, manifestFilePath } = require('./getDllFiles');
 
 let plugins = [
   new webpack.DefinePlugin({
-    'process.env': config.dev.env
+    'process.env': config.development.env
   }),
 
   new webpack.DllReferencePlugin({
@@ -23,7 +23,7 @@ let plugins = [
       {
           filepath: libFilePath,
           outputPath: path.posix.join(config.dll.outputPath),
-          publicPath: config.dll.dev.publicPath,
+          publicPath: config.dll.publicPath,
           includeSourcemap: false
       }
   ]),
@@ -80,7 +80,7 @@ Object.keys(config.entryObj.page).map((item) => {
 
 module.exports = merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
+    rules: utils.styleLoaders({ sourceMap: config.development.cssSourceMap })
   },
   devtool: 'eval-source-map',
   plugins: plugins

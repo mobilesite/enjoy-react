@@ -58,7 +58,7 @@ const entryObj = require('./getEntries');
             function(err) {
                 if (err) throw err;
                 console.log(
-                    `>>>>>>>>>>\n 自动生成文件：src\/${type.name}s\/main.js is saved!`
+                    `【自动生成文件：】src\/${type.name}s\/main.js is saved!`
                 );
             }
         );

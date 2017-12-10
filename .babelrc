@@ -1,7 +1,9 @@
 {
     "presets": [
         ["env", { "modules": false }], //"modules": false是用来做Tree Shaking的
-        "react"
+        "react",
+        "stage-0",
+        "react-optimize"
     ],
     "plugins": [
         "transform-decorators-legacy"  //支持装饰器语法
