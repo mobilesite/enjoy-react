@@ -1,0 +1,63 @@
+@import "../base.less";
+
+@height: 2px;
+@indicator-height: 26px;
+
+.ej-range{
+    display: flex;
+    height: @indicator-height;
+}
+.ej-range__left{
+    position: relative;
+    flex: 1;
+
+    &:before{
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        right: 0;
+        transform: translate(0, -50%);
+        height: @height;
+        background-color: #e9e9e9;
+    }
+}
+.ej-range__right{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    padding: 0 10px;
+    font-size: 14px;
+    color: @ej-color-text-gray;
+}
+.ej-range__finished{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+    height: @height;
+    background-color: @ej-color-primary;
+    font-size: 0;
+    line-height: 0;
+}
+.ej-range__indicator{
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 0;
+    box-sizing: border-box;
+    width: @indicator-height;
+    height: @indicator-height;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-align: center;
+}
+
+.theme-qsc{
+    .ej-range__finished{
+        background-color: @ej-color-primary-test;
+    }
+}

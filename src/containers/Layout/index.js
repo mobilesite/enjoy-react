@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import TopNav from '../TopNav';
-import FooterNav from '../FooterNav';
+import TopNav from '../../components/TopNav';
+import FooterNav from '../../components/FooterNav';
 
 @connect(store => {
     return {};

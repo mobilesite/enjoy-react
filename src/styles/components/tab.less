@@ -1,0 +1,61 @@
+@import "../base.less";
+
+.ej-tab__menu{
+    position: relative;
+    height: @ej-height-list-tab;
+}
+.ej-tab__menu-inner{
+    display: flex;
+    z-index: 999;
+    background-color: @ej-color-list-tab-bg;
+    position: sticky;
+    font-size: 14px;
+    border-bottom: 1px solid #E5E5E8;
+}
+.ej-tab__menu-inner--active{
+    color: @ej-color-primary;
+    &:after{
+        position: absolute;
+        z-index: 1;
+        bottom: -1px;
+        left: 50%;
+        width: 44px;
+        margin-left: -22px;
+        content: '';
+        border-bottom: 2px solid @ej-color-primary;
+    }
+}
+.theme-test{
+    .ej-tab__menu-inner--active{
+        color: @ej-color-primary-test;
+        &:after{
+            border-bottom: 2px solid @ej-color-primary-test;
+        }
+    }
+}
+.ej-tab__menu-inner--fixed{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+}
+.ej-tab__menu-item{
+    position: relative;
+    flex: 1;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: @ej-height-list-tab;
+    color: @ej-color-text-gray;
+
+    .mixin-set-tap-color();
+}
+
+.ej-tab__menu-text{
+    width: 100%;
+    display: block;
+}
+.ej-tab__pane{
+    padding-bottom: 0;
+}

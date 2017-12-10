@@ -1,0 +1,55 @@
+@import "../base.less";
+
+@height: 2px;
+@indicatorheight: 14px;
+@indicator-min-width: 44px;
+
+.ej-progressbar{
+    position: relative;
+    height: @indicatorheight;
+
+    &:before{
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        right: 0;
+        transform: translate(0, -50%);
+        height: @height;
+        background-color: #e9e9e9;
+    }
+}
+.ej-progressbar__finished{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+    height: @height;
+    background-color: @ej-color-primary;
+    font-size: 0;
+    line-height: 0;
+}
+.ej-progressbar__indicator{
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 0;
+    box-sizing: border-box;
+    height: @indicatorheight;
+    min-width: @indicator-min-width;
+    line-height: @indicatorheight;
+    border-radius: @indicatorheight/2;
+    background: @ej-color-primary;
+    font-size: @indicatorheight - 2;
+    color: #fff;
+    text-align: center;
+}
+
+.theme-qsc{
+    .ej-progressbar__indicator{
+        background: @ej-color-primary-test;
+    }
+    .ej-progressbar__finished{
+        background-color: @ej-color-primary-test;
+    }
+}

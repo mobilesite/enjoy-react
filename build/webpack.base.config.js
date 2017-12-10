@@ -22,7 +22,7 @@ let ret = {
         publicPath: config.assetsPublicPath,
     },
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.less'],
         alias: config.alias
     },
     module: {

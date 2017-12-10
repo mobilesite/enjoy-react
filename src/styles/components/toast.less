@@ -1,0 +1,34 @@
+.ej-toast{
+    .mixin-fullscreen();
+    z-index: 1000;
+    background-color: @ej-color-toast-mask-bg;
+}
+
+.ej-toast__inner{
+    position: absolute;
+    max-width: 60%;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    display: block;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: @ej-color-toast-bg;
+    text-align: center;
+    color: @ej-color-toast-font;
+    font-size: 14px;
+    word-wrap:break-word;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    line-height: 1.2;
+}
+
+.ej-toast__inner--show{
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+
+.ej-toast__inner-hidden{
+    transform: translate(-50%, -50%);
+    opacity: 0;
+}

@@ -1,0 +1,34 @@
+.ej-form-row{
+    position: relative;
+    text-align: left;
+    &:after{
+        .mixin-hairline-bottom();
+    }
+}
+.ej-form-label, .ej-form-input{
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+.ej-form-label{
+    padding: 24px 0 21px;
+}
+.ej-form-label-name{
+    display: block;
+    margin-bottom: 8px;
+}
+.ej-form-input{
+    font-size: 14px;
+    color: @ej-color-text-gray;
+}
+.ej-form-input-half{
+    display: inline-block;
+    width: 50%;
+}
+.ej-form-input-wrap{
+    .mixin-clearfix();
+}
+.ej-form-footer{
+    padding-top: 30px;
+    padding-bottom: 30px;
+}

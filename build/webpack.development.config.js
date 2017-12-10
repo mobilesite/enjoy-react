@@ -7,6 +7,7 @@ const baseWebpackConfig = require('./webpack.base.config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const { libFilePath, manifestFilePath } = require('./getDllFiles');
 
 let plugins = [
@@ -49,6 +50,11 @@ let plugins = [
     chunks: ['vendor']
   }),
 
+  // extract css into its own file
+  new ExtractTextPlugin({
+    filename: 'css/[name].[contenthash:7].css'
+  }),
+
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new webpack.NoEmitOnErrorsPlugin(),
@@ -80,7 +86,7 @@ Object.keys(config.entryObj.page).map((item) => {
 
 module.exports = merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.development.cssSourceMap })
+    rules: utils.styleLoaders({ sourceMap: config.development.cssSourceMap, extract: true })
   },
   devtool: 'eval-source-map',
   plugins: plugins

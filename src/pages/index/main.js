@@ -9,7 +9,7 @@ import store from './store';
 
 import Wrapper from '../../containers/Wrapper';
 
-require('../../styles/index.less');
+import './main.less';
 
 /* eslint-disable */
 render(
